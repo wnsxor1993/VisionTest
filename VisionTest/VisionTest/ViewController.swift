@@ -51,7 +51,7 @@ private extension ViewController {
         for num in 1...5 {
             let image: UIImage? = .init(named: "\(num)")
             
-            guard let image,  let cgImage: CGImage = image.cgImage else { continue }
+            guard let image, let cgImage: CGImage = image.cgImage else { continue }
             
             self.textImages.append(cgImage)
         }
@@ -76,12 +76,25 @@ private extension ViewController {
             
             let text = observations.compactMap {
                 $0.topCandidates(1).first?.string
-            }.joined(separator: "\n")
+            }
+                .map {
+                    if $0.last == "." || $0.last == "\"" {
+                        let newChar: String = $0 + " "
+                        return newChar
+                    }
+                    
+                    return $0
+                }
+                .joined()
             
             if convertedTexts.isEmpty {
                 self.convertedTexts = text
             } else {
                 self.convertedTexts += "\n\n\(text)"
+            }
+            
+            DispatchQueue.main.async {
+                self.textView.text = self.convertedTexts
             }
         }
         
