@@ -29,6 +29,7 @@ class ViewController: UIViewController {
         do {
             guard let vnTextRequest else { return }
             
+            // Request 실행
             try self.vnRequestHandlers.forEach {
                 try $0.perform([vnTextRequest])
             }
@@ -61,10 +62,12 @@ private extension ViewController {
         guard !(textImages.isEmpty) else { return }
         
         textImages.forEach {
+            // 각각의 이미지를 다룰 Handler 생성
             let vnRequestHandler: VNImageRequestHandler = .init(cgImage: $0)
             self.vnRequestHandlers.append(vnRequestHandler)
         }
         
+        // Text 변환 Request 생성
         let request: VNRecognizeTextRequest = .init { [weak self] request, error in
             guard let self, let observations = request.results as? [VNRecognizedTextObservation] else { return }
             
@@ -103,10 +106,12 @@ private extension ViewController {
     
     func configureVisionSetting() {
         if #available(iOS 16.0, *) {
+            // 최신 Vision으로 할당
             let revision3: Int = VNRecognizeTextRequestRevision3
             self.vnTextRequest?.revision = revision3
         }
         
+        // 속도와 정확도 중에서 선택 가능
         self.vnTextRequest?.recognitionLevel = .accurate
         self.vnTextRequest?.recognitionLanguages = ["ko-KR"]
         self.vnTextRequest?.usesLanguageCorrection = true
