@@ -16,6 +16,8 @@ final class CameraOCRViewController: UIViewController {
     private let vnCameraVC: VNDocumentCameraViewController = .init()
     private var textRecognitionRequest: VNRecognizeTextRequest?
     
+    private var vnCGImage: CGImage?
+    
     private lazy var textObserver: ((String) -> Void) = { [weak self] newText in
         guard let self else { return }
         
@@ -39,10 +41,15 @@ extension CameraOCRViewController: VNDocumentCameraViewControllerDelegate {
     
     func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
         for pageNumber in 0..<scan.pageCount {
-            let image = scan.imageOfPage(at: pageNumber)
+            let image: UIImage = scan.imageOfPage(at: pageNumber)
+            self.convertToCGImage(from: image)
         }
 
         controller.dismiss(animated: true)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.executeOCR()
+        }
     }
     
     func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
@@ -58,9 +65,33 @@ extension CameraOCRViewController: VNDocumentCameraViewControllerDelegate {
 
 private extension CameraOCRViewController {
     
+    func convertToCGImage(from image: UIImage) {
+        guard let cgImage: CGImage = image.cgImage else { return }
+        
+        self.vnCGImage = cgImage
+    }
+    
+    func executeOCR() {
+        guard let vnCGImage, let textRecognitionRequest else { return }
+        
+        let requestHandler: VNImageRequestHandler = .init(cgImage: vnCGImage)
+        
+        DispatchQueue.global(qos: .background).async {
+            do {
+                try requestHandler.perform([textRecognitionRequest])
+            } catch {
+                print("RequestHandlerError: \(error.localizedDescription)")
+            }
+        }
+    }
+}
+
+private extension CameraOCRViewController {
+    
     func configureVision() {
         self.configureVNCamera()
         self.configureVNTextRequest()
+        self.configureRequestSetting()
     }
     
     func configureVNCamera() {
@@ -94,5 +125,18 @@ private extension CameraOCRViewController {
             let completedText = observedText.replacingOccurrences(of: ".", with: ".\n")
             self.textObserver(completedText)
         }
+    }
+    
+    func configureRequestSetting() {
+        if #available(iOS 16.0, *) {
+            // 최신 Vision으로 할당
+            let revision3: Int = VNRecognizeTextRequestRevision3
+            self.textRecognitionRequest?.revision = revision3
+        }
+        
+        // 속도와 정확도 중에서 선택 가능
+        self.textRecognitionRequest?.recognitionLevel = .accurate
+        self.textRecognitionRequest?.recognitionLanguages = ["ko-KR"]
+        self.textRecognitionRequest?.usesLanguageCorrection = true
     }
 }
