@@ -13,6 +13,7 @@
 		D2C6064A2A25B39C005CBB7F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2C606482A25B39C005CBB7F /* Main.storyboard */; };
 		D2C6064C2A25B39E005CBB7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2C6064B2A25B39E005CBB7F /* Assets.xcassets */; };
 		D2C6064F2A25B39E005CBB7F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2C6064D2A25B39E005CBB7F /* LaunchScreen.storyboard */; };
+		D2C606572A26E28F005CBB7F /* CameraOCRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C606562A26E28F005CBB7F /* CameraOCRViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		D2C6064B2A25B39E005CBB7F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D2C6064E2A25B39E005CBB7F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D2C606502A25B39E005CBB7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D2C606562A26E28F005CBB7F /* CameraOCRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraOCRViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				D2C606422A25B39C005CBB7F /* AppDelegate.swift */,
 				D2C606442A25B39C005CBB7F /* SceneDelegate.swift */,
 				D2C606462A25B39C005CBB7F /* ViewController.swift */,
+				D2C606562A26E28F005CBB7F /* CameraOCRViewController.swift */,
 				D2C606482A25B39C005CBB7F /* Main.storyboard */,
 				D2C6064B2A25B39E005CBB7F /* Assets.xcassets */,
 				D2C6064D2A25B39E005CBB7F /* LaunchScreen.storyboard */,
@@ -138,6 +141,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2C606572A26E28F005CBB7F /* CameraOCRViewController.swift in Sources */,
 				D2C606472A25B39C005CBB7F /* ViewController.swift in Sources */,
 				D2C606432A25B39C005CBB7F /* AppDelegate.swift in Sources */,
 				D2C606452A25B39C005CBB7F /* SceneDelegate.swift in Sources */,
@@ -290,6 +294,7 @@
 				DEVELOPMENT_TEAM = 6HA2CYDMF3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VisionTest/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 사용 허용 부탁드림";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -319,6 +324,7 @@
 				DEVELOPMENT_TEAM = 6HA2CYDMF3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VisionTest/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 사용 허용 부탁드림";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
