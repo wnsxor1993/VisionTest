@@ -14,9 +14,20 @@ final class CameraOCRViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     
     private let vnCameraVC: VNDocumentCameraViewController = .init()
+    private var textRecognitionRequest: VNRecognizeTextRequest?
+    
+    private lazy var textObserver: ((String) -> Void) = { [weak self] newText in
+        guard let self else { return }
+        
+        DispatchQueue.main.async {
+            self.textView.text = newText
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.configureVision()
     }
     
     @IBAction func takePicture(_ sender: UIButton) {
@@ -48,7 +59,40 @@ extension CameraOCRViewController: VNDocumentCameraViewControllerDelegate {
 private extension CameraOCRViewController {
     
     func configureVision() {
+        self.configureVNCamera()
+        self.configureVNTextRequest()
+    }
+    
+    func configureVNCamera() {
         self.vnCameraVC.delegate = self
         self.vnCameraVC.modalPresentationStyle = .fullScreen
+    }
+    
+    func configureVNTextRequest() {
+        self.textRecognitionRequest = .init { [weak self] (request, error) in
+            guard let self, let observations = request.results as? [VNRecognizedTextObservation] else { return }
+            
+            if let error {
+                print("TextRequestError: \(error.localizedDescription)")
+                
+                return
+            }
+            
+            let observedText = observations.compactMap {
+                $0.topCandidates(1).first?.string
+            }
+                .map {
+                    if $0.last == "." || $0.last == "\"" {
+                        let newChar: String = $0 + " "
+                        return newChar
+                    }
+                    
+                    return $0
+                }
+                .joined()
+            
+            let completedText = observedText.replacingOccurrences(of: ".", with: ".\n")
+            self.textObserver(completedText)
+        }
     }
 }
