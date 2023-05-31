@@ -68,9 +68,46 @@
                     <view key="view" contentMode="scaleToFill" id="Unp-4H-Z1K">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="js7-Y5-4KM">
+                                <rect key="frame" x="10" y="59" width="373" height="679"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DIS-nI-229">
+                                <rect key="frame" x="146.66666666666666" y="758" width="100" height="40"/>
+                                <color key="backgroundColor" name="AccentColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="NxL-dL-gJ9"/>
+                                    <constraint firstAttribute="width" constant="100" id="ZlV-QQ-6y5"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="촬영">
+                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="executeVisionOCR:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qhJ-oa-SeG"/>
+                                    <action selector="takePicture:" destination="g8G-N5-znL" eventType="touchUpInside" id="9ii-jh-Mb0"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="fjH-AA-QXF"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="fjH-AA-QXF" firstAttribute="trailing" secondItem="js7-Y5-4KM" secondAttribute="trailing" constant="10" id="AMs-E5-f1N"/>
+                            <constraint firstItem="js7-Y5-4KM" firstAttribute="leading" secondItem="fjH-AA-QXF" secondAttribute="leading" constant="10" id="IAL-dP-iTf"/>
+                            <constraint firstItem="DIS-nI-229" firstAttribute="centerX" secondItem="fjH-AA-QXF" secondAttribute="centerX" id="TmR-nx-Mxt"/>
+                            <constraint firstItem="DIS-nI-229" firstAttribute="top" secondItem="js7-Y5-4KM" secondAttribute="bottom" constant="20" id="ieR-mo-pXO"/>
+                            <constraint firstItem="fjH-AA-QXF" firstAttribute="bottom" secondItem="DIS-nI-229" secondAttribute="bottom" constant="20" id="r4H-kd-Lze"/>
+                            <constraint firstItem="js7-Y5-4KM" firstAttribute="top" secondItem="fjH-AA-QXF" secondAttribute="top" id="swU-TY-ndm"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="textView" destination="js7-Y5-4KM" id="xEh-Bj-1j7"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JhI-CE-OHR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
