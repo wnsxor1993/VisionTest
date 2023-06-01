@@ -13,7 +13,7 @@ final class CameraOCRViewController: UIViewController {
     
     @IBOutlet weak var textView: UITextView!
     
-    private let vnCameraVC: VNDocumentCameraViewController = .init()
+    private var vnCameraVC: VNDocumentCameraViewController?
     private var textRecognitionRequest: VNRecognizeTextRequest?
     
     private var vnCGImage: CGImage?
@@ -32,7 +32,12 @@ final class CameraOCRViewController: UIViewController {
         self.configureVision()
     }
     
+    // VNCamera를 새로 생성하지 않으면 이전 촬영 이미지들이 그대로 남아있음
     @IBAction func takePicture(_ sender: UIButton) {
+        self.initializeVNCamera()
+        
+        guard let vnCameraVC else { return }
+        
         self.present(vnCameraVC, animated: true)
     }
 }
@@ -45,7 +50,9 @@ extension CameraOCRViewController: VNDocumentCameraViewControllerDelegate {
             self.convertToCGImage(from: image)
         }
 
-        controller.dismiss(animated: true)
+        controller.dismiss(animated: true) {
+            self.vnCameraVC = nil
+        }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.executeOCR()
@@ -55,15 +62,25 @@ extension CameraOCRViewController: VNDocumentCameraViewControllerDelegate {
     func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
         print("CameraDocumentError: \(error.localizedDescription)")
         
-        controller.dismiss(animated: true)
+        controller.dismiss(animated: true) {
+            self.vnCameraVC = nil
+        }
     }
     
     func documentCameraViewControllerDidCancel(_ controller: VNDocumentCameraViewController) {
-        controller.dismiss(animated: true)
+        controller.dismiss(animated: true) {
+            self.vnCameraVC = nil
+        }
     }
 }
 
 private extension CameraOCRViewController {
+    
+    func initializeVNCamera() {
+        self.vnCameraVC = .init()
+        self.vnCameraVC?.delegate = self
+        self.vnCameraVC?.modalPresentationStyle = .fullScreen
+    }
     
     func convertToCGImage(from image: UIImage) {
         guard let cgImage: CGImage = image.cgImage else { return }
@@ -89,14 +106,8 @@ private extension CameraOCRViewController {
 private extension CameraOCRViewController {
     
     func configureVision() {
-        self.configureVNCamera()
         self.configureVNTextRequest()
         self.configureRequestSetting()
-    }
-    
-    func configureVNCamera() {
-        self.vnCameraVC.delegate = self
-        self.vnCameraVC.modalPresentationStyle = .fullScreen
     }
     
     func configureVNTextRequest() {
@@ -127,6 +138,7 @@ private extension CameraOCRViewController {
         }
     }
     
+    // textRecognitionRequest 설정이 없으면 영어가 기본으로 잡혀서 인식이 안 됨
     func configureRequestSetting() {
         if #available(iOS 16.0, *) {
             // 최신 Vision으로 할당
